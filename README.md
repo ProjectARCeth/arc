@@ -1,6 +1,6 @@
 # arc 
 
-Project ARC (Autonomous Racing Car) is a project to develop an autonomous car at ASL, ETH Zürich. This repository contains the framework to control a car based on the teach and repeat method.
+Project ARC (Autonomous Racing Car) is a project to develop an autonomous car at ASL, ETH Zürich. This repository contains the framework to control a car autonomously (high-level) based on the teach and repeat method.
 
 Further information about Project ARC: http://www.project-arc.ch/
 
