@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>	
+	
+<launch>
+
+  <rosparam command="load" file="$(find arc)/cfg/arc.yaml" />
+ 
+  <!-- Launch parameters: Name = name of testing, Mode = teach(false), repeat(true), Path_Length =  length of drivable path from beginning -->
+  <arg name="Name" default="/home/sele/Paths/test" />
+  <arg name="Mode" default="true" /> 
+  <arg name="Path_Length" default="full" /> 
+
+  <!-- starting ORB_SLAM (VOC-PATH CFG-PATH USE-VIEWER Reuse-Map Map-Name)--> 
+  <node pkg="orb_slam2" type="stereo" name="stereo" args="$(find orb_slam2)/../../../Vocabulary/ORBvoc.txt   $(find orb_slam2)/../../Stereo/ARC.yaml true $(arg Mode) $(arg Name) $(arg Name)" output="screen" >
+  	<remap from="/camera/left/image_raw" to="/cam0/image_raw"/>
+  	<remap from="/camera/right/image_raw" to="/cam1/image_raw"/>
+  </node>
+  <!-- starting Rovio -->
+  <node pkg="rovio" type="rovio_node" name="rovio" output="screen">
+   <param name="filter_config" value="$(find rovio)/cfg/rovio_test.info"/>
+   <param name="camera0_config" value="$(find rovio)/cfg/rovio_cam0.yaml"/>
+   <param name="camera1_config" value="$(find rovio)/cfg/rovio_cam1.yaml"/>
+  </node>
+
+
+</launch>
+
+

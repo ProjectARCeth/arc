@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>	
+	
+<launch>
+
+  <rosparam command="load" file="$(find arc)/cfg/arc.yaml" />
+
+  <!-- Sensors -->
+  <arg name="GPS" value="false" />
+  <arg name="SENSORS" value="false" />
+  <arg name="INTERFACE" value="false" />
+  <!-- Safety -->
+  <arg name="OBSTACLE_DETECTION" value="false"/> 
+ 
+  <!-- Launch parameters: Name = name of testing, Mode = teach(false), repeat(true), Path_Length =  length of drivable path from beginning -->
+  <arg name="Name" default="/home/sele/Paths/test" />
+  <arg name="Mode" default="true" /> 
+
+<group if="$(arg SENSORS)">
+  <!-- GPS -->
+  <node name="gps" pkg="ublox_gps" type="ublox_gps" output="screen" if="$(arg GPS)">
+  	 <param name="device" type="string" value="/dev/ttyACM0"/>
+   	 <param name="frame_id" type="string" value="gps"/>
+   	 <param name="baudrate" type="int" value="57600"/>
+   	 <param name="rate" type="int" value="10"/>
+   	 <param name="enable_sbas" type="bool" value="false"/>
+   	 <param name="dynamic_model" type="string" value="portable"/>
+    	 <param name="fix_mode" type="string" value="both"/>
+   	 <param name="dr_limit" type="int" value="0"/>
+   	 <param name="enable_beidou" type="bool" value="false"/>
+    	 <param name="enable_glonass" type="bool" value="false"/>
+   	 <param name="enable_ppp" type="bool" value="false"/>
+   	 <param name="ublox_version" type="int" value="8"/>
+   	 <param name="initializing_samples" type="int" value="50"/>
+  </node>
+  <!-- VI - Sensor -->
+  <node name="visensor_node" pkg="visensor_node" type="visensor_node" output="screen" />
+  <!-- Velodyne - Laser - Sensor -->
+  <group if="$(arg OBSTACLE_DETECTION)">
+  	<arg name="calibration" default="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+  	<arg name="device_ip" default="" />
+  	<arg name="frame_id" default="velodyne" />
+  	<arg name="manager" default="$(arg frame_id)_nodelet_manager" />
+  	<arg name="max_range" default="130.0" />
+  	<arg name="min_range" default="0.4" />
+  	<arg name="pcap" default="" />
+  	<arg name="port" default="2368" />
+  	<arg name="read_fast" default="false" />
+  	<arg name="read_once" default="false" />
+  	<arg name="repeat_delay" default="0.0" />
+  	<arg name="rpm" default="600.0" />
+  	<include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+    	<arg name="device_ip" value="$(arg device_ip)"/>
+    	<arg name="frame_id" value="$(arg frame_id)"/>
+    	<arg name="manager" value="$(arg manager)" />
+    	<arg name="model" value="VLP16"/>
+    	<arg name="pcap" value="$(arg pcap)"/>
+    	<arg name="port" value="$(arg port)"/>
+    	<arg name="read_fast" value="$(arg read_fast)"/>
+    	<arg name="read_once" value="$(arg read_once)"/>
+    	<arg name="repeat_delay" value="$(arg repeat_delay)"/>
+   	<arg name="rpm" value="$(arg rpm)"/>
+ 	</include>
+  	<include file="$(find velodyne_pointcloud)/launch/cloud_nodelet.launch">
+   	<arg name="calibration" value="$(arg calibration)"/>
+    	<arg name="manager" value="$(arg manager)" />
+    	<arg name="max_range" value="$(arg max_range)"/>
+    	<arg name="min_range" value="$(arg min_range)"/>
+  	</include>
+  </group>
+</group>
+
+  <!-- starting ORB_SLAM (VOC-PATH CFG-PATH USE-VIEWER Reuse-Map Map-Name)--> 
+  <node pkg="orb_slam2" type="stereo" name="stereo" args="$(find orb_slam2)/../../../Vocabulary/ORBvoc.txt   $(find orb_slam2)/../../Stereo/ARC.yaml true $(arg Mode) $(arg Name) $(arg Name)" output="screen">
+  	<remap from="/camera/left/image_raw" to="/cam0/image_raw"/>
+  	<remap from="/camera/right/image_raw" to="/cam1/image_raw"/>
+  </node>
+  <!-- starting Rovio -->
+  <node pkg="rovio" type="rovio_node" name="rovio" output="screen">
+   <param name="filter_config" value="$(find rovio)/cfg/rovio.info"/>
+   <param name="camera0_config" value="$(find rovio)/cfg/rovio_cam0.yaml"/>
+   <param name="camera1_config" value="$(find rovio)/cfg/rovio_cam1.yaml"/>
+  </node>
+<!-- starting ARC -->
+  <node pkg="arc" type="main" name="arc" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS)" />
+  <node pkg="arc" type="viewer.py" name="viewer" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) " />
+  <node pkg="arc" type="tracker_pdf.py" name="tracker_pdf" output="screen" args="$(arg Name)" if="$(arg Mode)"/>
+
+</launch>
+
+
