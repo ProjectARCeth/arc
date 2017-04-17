@@ -4,13 +4,13 @@ Project ARC (Autonomous Racing Car) is a project to develop an autonomous car at
 
 Further information about Project ARC: http://www.project-arc.ch/
 
-##Installation
+## Installation
 
 ROS: Ros Indigo Framework
 
 GUI: PyQt4, pyqtgraph and other standard python libraries
 
-##Launch command
+## Launch command
 
 catkin build arc
 roslaunch arc arc.launch
