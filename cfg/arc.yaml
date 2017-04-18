@@ -1,22 +1,22 @@
 #Car specific parameters.
 erod/DISTANCE_FRONT_REAR_AXIS: 3.0 #[m], distance from front to rear axis.
 erod/DISTANCE_WHEEL_AXIS: 2.35585  #[m], distance between front and rear axis.
-erod/DISTANCE_VI_REAR_AXIS: 2.4 #[m], distance rear axis and vi.
+erod/DISTANCE_VI_REAR_AXIS: 2.45 #[m], distance rear axis and vi.
 erod/DISTANCE_LASER_REAR_AXIS: 0.54968 #[m], parallel to road.
 erod/HEIGHT_LASER_REAR_AXIS: 0.9 #[m], distance from laser to rear axis.
 erod/TOTAL_WIDTH: 1.6071  #[m], width of entire car.
 erod/WIDTH_WHEEL_AXIS: 1.5 #[m], distance wheel joints.
 erod/MAX_LATERAL_ACCELERATION: 8 #[m/s²], max. lateral acceleration.
-erod/MAX_STEERING_ANGLE: 20 #[rad] +-° steering wheel impact.
+erod/MAX_STEERING_ANGLE: 25 #[rad] +-° steering wheel impact.
 erod/MAX_VELOCITY: 17.5 #[m/s], ~70 km/h.
 erod/MU_HAFT: 0.8 # friction parameter.
 erod/WHEEL_DIAMETER: 0.5 #[m]. 
 
 #Sensor calibration.
-sensor/CAM_INIT_QUAT_X: -0.00126 #Initial orientation measurement of cam.
-sensor/CAM_INIT_QUAT_Y: 0.85391 #Initial orientation measurement of cam.
-sensor/CAM_INIT_QUAT_Z: -0.52041 #Initial orientation measurement of cam.
-sensor/CAM_INIT_QUAT_W: 0.00033 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_X: 0.0041 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_Y: 0.7754 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_Z: -0.6314 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_W: 0.0032 #Initial orientation measurement of cam.
 
 #General code parameters.
 general/MY_PORT: 8010 #My computer port.
@@ -26,13 +26,13 @@ general/VCU_PARAMETER_MODE: 'street' #street or lift VCU - velocity control para
 #Safety parameters.
 safety/CRITICAL_OBSTACLE_DISTANCE: 2.0 #[m] 
 safety/FOS_VELOCITY: 1.0 #[0-1]
-safety/FOS_DANGERGRID: 1.5 #[>1]
-safety/FOS_BRAKING_DISTANCE: 2.0 #[>1]
+safety/FOS_DANGERGRID: 1.0 #[>1]
+safety/FOS_BRAKING_DISTANCE: 10.0 #[>1]
 safety/MAX_ABSOLUTE_VELOCITY: 20
 safety/MAX_DEVIATION_FROM_TEACH_PATH: 100.0  #[m]
 safety/MIN_SHUTDOWN_VELOCITY: 1.0 #[m/s]
 safety/MAX_ORIENTATION_DIVERGENCE: 10 #[deg]
-safety/STATIC_TOLERANCE_LASER: 2.0 #[m] ObstacleDetection
+safety/STATIC_TOLERANCE_LASER: 1.7 #[m] ObstacleDetection
 safety/FACTOR_TOLERANCE_LASER: 0.12 #[m] ObstacleDetection
 safety/OBSTACLE_SEARCH_WIDTH: 1.5 #[m] ObstacleDetection
 safety/DOWN_TIME: 20.0 #[s] Time to emergency stop after high level connection broken.
@@ -42,13 +42,13 @@ control/CURRENT_ARRAY_SEARCHING_WIDTH: 4.0  #[m]
 control/DISTANCE_INTERPOLATION: 3 #Distance of three points for curvature calculation.
 control/K1_LAD_LASER: 1.0 #Dynamic part for lenght of path to inflate.
 control/K2_LAD_LASER: 5.0 #Static part for lenght of path to inflate.
-control/K1_LAD_S: 0.8 #Dynamic part for look ahead distance steer.
+control/K1_LAD_S: 1.1 #Dynamic part for look ahead distance steer.
 control/K2_LAD_S: 0 #Static part for look ahead distance steer.
 control/K1_LAD_V: 0.5 #Dynamic part for lad radius for velocity.
 control/K2_LAD_V: 0 #Dynamic part for lad radius for velocity reference.
-control/SHUT_DOWN_TIME: 5 #Time to slow down to 0 in case of controlled shutdown.
+control/SHUT_DOWN_TIME: 3 #Time to slow down to 0 in case of controlled shutdown.
 control/SLOW_DOWN_DISTANCE: 8 #Distance to end of path for car stating to slow down.
-control/SLOW_DOWN_PUFFER: 3 #Actual distance to end we will stop.
+control/SLOW_DOWN_PUFFER: 5 #Actual distance to end we will stop.
 control/V_FREEDOM: 1.5 #Allowed upper difference to teach velocity.
 control/NUMBER_OF_EMERGENCY_CELLS: 1 #number of consecutive apparences of obstacles closer than braking distance for notstop.
 control/UPPERBOUND_LAD_S: 7.3 #Empyrisch getestet
