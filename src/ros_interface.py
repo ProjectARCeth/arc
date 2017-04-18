@@ -46,7 +46,7 @@ class ROSInterface(QtCore.QObject):
 
 	def pathCallback(self, msg):
 		index = len(msg.poses)-1
-		if(index == -1) return
+		if(index == -1): return
 		lastest_pose = [-msg.poses[index].pose.position.y, msg.poses[index].pose.position.x]
 		self.repeat_path_signal.emit(lastest_pose)
 

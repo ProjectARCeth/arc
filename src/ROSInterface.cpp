@@ -44,7 +44,7 @@ void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* trac
 }	
 
 void ROSInterface::spinning(){
-	ros::Rate rate(20);
+	ros::Rate rate(10);
 	int gui_counter = 0;
 	int tracker_counter = 0;
 	while(ros::ok()){

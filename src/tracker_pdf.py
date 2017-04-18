@@ -37,6 +37,8 @@ class PDFTracker:
 		self.velocity = []
 		self.velocity_should = []
 		self.velocity_teach = []
+		self.steering = []
+		self.steering_should = []
 		self.tracking_error = []
 		self.repeat_path = np.zeros((1,2))
 		self.teach_path = np.zeros((1,2))
@@ -49,7 +51,7 @@ class PDFTracker:
 	def createPDF(self):
 		#Create plots.
 		fig = plt.figure(figsize=(10, 7))
-		gs = gridspec.GridSpec(4, 4)
+		gs = gridspec.GridSpec(5, 4)
 		gs.update(hspace=0.4)
 
 		ax0 = plt.subplot(gs[0, :4])
@@ -63,14 +65,19 @@ class PDFTracker:
 		plt.plot(self.velocity_should, 'r', label="should")
 		plt.ylabel('velocity[km/h]')
 
-		ax2 = plt.subplot(gs[2:4,:2])
+		ax2 = plt.subplot(gs[2, :4])
+		plt.plot(self.steering, 'b', label="repeat")
+		plt.plot(self.steering_should, 'r', label="should")
+		plt.ylabel('steering[deg]')
+
+		ax3 = plt.subplot(gs[3:5,:2])
 		teach_x, teach_y = getTwoArrays(self.teach_path)
 		repeat_x, repeat_y = getTwoArrays(self.repeat_path)
 		plt.plot(teach_x, teach_y, 'go', label="teach")
 		plt.plot(repeat_x, repeat_y, 'bo', label="repeat")
 		plt.ylabel('Teach and Repeat path')
 		
-		ax3 = plt.subplot(gs[2:3,2:4])
+		ax4 = plt.subplot(gs[3:4,2:4])
 		plt.axis('off')
 		frame = plt.gca()
 		frame.axes.get_xaxis().set_ticks([])
@@ -83,7 +90,7 @@ class PDFTracker:
 		path_table.set_fontsize(14)
 		path_table.scale(2.2,3)
 
-		ax4= plt.subplot(gs[3:4,2:4])
+		ax5 = plt.subplot(gs[4:5,2:4])
 		plt.axis('off')
 		frame = plt.gca()
 		frame.axes.get_xaxis().set_ticks([])
@@ -117,6 +124,8 @@ class PDFTracker:
 		self.velocity.append(3.6*msg.data[0])
 		self.velocity_should.append(3.6*msg.data[1])
 		self.velocity_teach.append(3.6*msg.data[9])
+		self.steering.append(math.degrees(msg.data[2]))
+		self.steering_should.append(math.degrees(msg.data[3]))
 		self.tracking_error.append(msg.data[5])
 		self.distance_start.append(msg.data[7])
 
