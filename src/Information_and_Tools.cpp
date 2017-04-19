@@ -302,7 +302,8 @@ void Information::init(const ros::NodeHandle* node, Programm to_launch, bool mod
     node->getParam("/control/UPPERBOUND_LAD_S", control_.upperbound_lad_s);
     node->getParam("/control/LOWERBOUND_LAD_S", control_.lowerbound_lad_s);
     node->getParam("/control/EMERGENCY_DISTANCE_LB", control_.emergency_distance_lb);
-    node->getParam("/control/EMERGENCY_DISTANCE_UB", control_.obstacle_slow_down_distance);
+    node->getParam("/control/EMERGENCY_DISTANCE_UB", control_.emergency_distance_ub);
+    node->getParam("/control/OBSTACLE_SLOW_DOWN_DISTANCE", control_.obstacle_slow_down_distance);
     node->getParam("/control/OBSTACLE_PUFFER_DISTANCE", control_.obstacle_puffer_distance);
     node->getParam("/control/LENGHT_CORRECTION_PATH", control_.length_correction_path);
     //Set up physics.

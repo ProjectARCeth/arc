@@ -43,7 +43,8 @@ class GUI(QtGui.QWidget):
 		middle_left_under_left_layout = QtGui.QVBoxLayout()
 		middle_left_under_right_layout = QtGui.QVBoxLayout()
 		middle_right_layout = QtGui.QVBoxLayout()
-		self.lower_left_layout = QtGui.QHBoxLayout()
+		lower_left_up_layout = QtGui.QHBoxLayout()
+		lower_left_down_layout = QtGui.QHBoxLayout()
 		lower_center_layout = QtGui.QHBoxLayout()
 		lower_right_layout = QtGui.QHBoxLayout()
 		#Create title label.
@@ -95,25 +96,25 @@ class GUI(QtGui.QWidget):
 		self.plotwidget.addItem(self.plotcurve)
 		middle_right_layout.addWidget(self.plotwidget)
 		#Create programm label.
-		if(self.use_obsdet): self.obstacle_detection_label = self.createProgramm("OSDET", self.lower_left_layout)
-		self.pure_pursuit_label = self.createProgramm("PP", self.lower_left_layout)
-		self.rovio_label = self.createProgramm("ROVIO", self.lower_left_layout)
-		self.rslam_label = self.createProgramm("RSLAM", self.lower_left_layout)
-		self.state_estimation_label = self.createProgramm("SEST", self.lower_left_layout)
-		if(self.use_vcu): self.vcu_label = self.createProgramm("VCU", self.lower_left_layout)
-		if(self.use_gps and self.use_sensors): self.gps_label = self.createProgramm("GPS", self.lower_left_layout)
-		if(self.use_sensors): self.vi_label = self.createProgramm("VI", self.lower_left_layout)
-		if(self.use_sensors and self.use_obsdet): self.velodyne_label = self.createProgramm("LASER", self.lower_left_layout)
+		if(self.use_obsdet): self.obstacle_detection_label = self.createProgramm("OBS", lower_left_down_layout, lower_left_up_layout)
+		self.pure_pursuit_label = self.createProgramm("PPU", lower_left_down_layout, lower_left_up_layout)
+		self.rovio_label = self.createProgramm("ROV", lower_left_down_layout, lower_left_up_layout)
+		self.rslam_label = self.createProgramm("RSL", lower_left_down_layout, lower_left_up_layout)
+		self.state_estimation_label = self.createProgramm("SES", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_vcu): self.vcu_label = self.createProgramm("VCU", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_gps and self.use_sensors): self.gps_label = self.createProgramm("GPS", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_sensors): self.vi_label = self.createProgramm("VIS", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_sensors and self.use_obsdet): self.velodyne_label = self.createProgramm("VEL", lower_left_down_layout, lower_left_up_layout)
 		#Shutdown button.
 		self.shutdown_button = QtGui.QPushButton("Shutdown")
 		self.shutdown_button.setFont(QtGui.QFont('SansSerif',15,weight=QtGui.QFont.Bold))
-		self.shutdown_button.setFixedSize(self.width/4,self.height/8)
+		self.shutdown_button.setFixedSize(self.width/6,self.height/8)
 		lower_center_layout.addWidget(self.shutdown_button)
 		#Stop button.
 		self.stop_button = QtGui.QPushButton("STOP")
 		self.stop_button.setStyleSheet("background-color: white")
 		self.stop_button.setFont(QtGui.QFont('SansSerif',15,weight=QtGui.QFont.Bold))
-		self.stop_button.setFixedSize(self.width/4,self.height/8)
+		self.stop_button.setFixedSize(self.width/6,self.height/8)
 		lower_center_layout.addWidget(self.stop_button)
 		#Mode button
 		self.start_button = QtGui.QPushButton("System Booting")
@@ -129,9 +130,10 @@ class GUI(QtGui.QWidget):
 		layout.addLayout(middle_left_under_left_layout,2,0,1,2)
 		layout.addLayout(middle_left_under_right_layout,2,1,1,2)
 		layout.addLayout(middle_right_layout,1,2,2,3)
-		layout.addLayout(self.lower_left_layout,4,0,1,2)
-		layout.addLayout(lower_center_layout,4,3)
-		layout.addLayout(lower_right_layout,4,4)
+		layout.addLayout(lower_left_up_layout,4,0,1,2)
+		layout.addLayout(lower_left_down_layout,5,0,1,2)
+		layout.addLayout(lower_center_layout,4,3,2,1)
+		layout.addLayout(lower_right_layout,4,4,2,1)
 		self.setLayout(layout)
 		#Set Window geometry and background color.
 		palette = QtGui.QPalette()
@@ -148,7 +150,8 @@ class GUI(QtGui.QWidget):
 		top_right_layout = QtGui.QHBoxLayout()
 		middle_left_layout = QtGui.QVBoxLayout()
 		middle_right_layout = QtGui.QVBoxLayout()
-		self.lower_left_layout = QtGui.QHBoxLayout()
+		lower_left_up_layout = QtGui.QHBoxLayout()
+		lower_left_down_layout = QtGui.QHBoxLayout()
 		lower_right_layout = QtGui.QHBoxLayout()
 		#Create title label.
 		title_label = QtGui.QLabel("Autonomous Racing Car")
@@ -183,12 +186,12 @@ class GUI(QtGui.QWidget):
 		self.plotwidget.addItem(self.plotcurve)
 		middle_right_layout.addWidget(self.plotwidget)
 		#Create programm label.
-		self.rovio_label = self.createProgramm("ROVIO", self.lower_left_layout)
-		self.rslam_label = self.createProgramm("RSLAM", self.lower_left_layout)
-		self.state_estimation_label = self.createProgramm("SEST", self.lower_left_layout)
-		if(self.use_vcu): self.vcu_label = self.createProgramm("VCU", self.lower_left_layout)
-		if(self.use_gps and self.use_sensors): self.gps_label = self.createProgramm("GPS", self.lower_left_layout)
-		if(self.use_sensors): self.vi_label = self.createProgramm("VI", self.lower_left_layout)
+		self.rovio_label = self.createProgramm("ROV", lower_left_down_layout, lower_left_up_layout)
+		self.rslam_label = self.createProgramm("RSL", lower_left_down_layout, lower_left_up_layout)
+		self.state_estimation_label = self.createProgramm("SES", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_vcu): self.vcu_label = self.createProgramm("VCU", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_gps and self.use_sensors): self.gps_label = self.createProgramm("GPS", lower_left_down_layout, lower_left_up_layout)
+		if(self.use_sensors): self.vi_label = self.createProgramm("VIS", lower_left_down_layout, lower_left_up_layout)
 		#Mode button
 		self.start_button = QtGui.QPushButton("System Booting")
 		self.start_button.setFont(QtGui.QFont('SansSerif',15,weight=QtGui.QFont.Bold))
@@ -201,8 +204,9 @@ class GUI(QtGui.QWidget):
 		layout.addLayout(top_right_layout,0,4)
 		layout.addLayout(middle_left_layout,1,0,1,3)
 		layout.addLayout(middle_right_layout,1,1,3,4)
-		layout.addLayout(self.lower_left_layout,4,0,1,4)
-		layout.addLayout(lower_right_layout,4,4)
+		layout.addLayout(lower_left_up_layout,4,0,1,4)
+		layout.addLayout(lower_left_down_layout,5,0,1,4)
+		layout.addLayout(lower_right_layout,4,4,2,2)
 		self.setLayout(layout)
 		#Set Window geometry and background color.
 		palette = QtGui.QPalette()
@@ -231,21 +235,25 @@ class GUI(QtGui.QWidget):
 
 	def createLabel(self, name, layout):
 		label = QtGui.QLabel(name)
-		palette = QtGui.QPalette()
-		palette.setColor(QtGui.QPalette.Foreground,QtCore.Qt.white)
-		label.setPalette(palette)
-		label.setFont(QtGui.QFont('SansSerif', 10))
+		label.setStyleSheet("color: white")
+		label.setFont(QtGui.QFont("Times",weight=QtGui.QFont.Bold))
 		label.setFixedSize(self.width/10, self.height/20)
 		layout.addWidget(label)
 		return label
 
-	def createProgramm(self, name, layout):
-		label = QtGui.QLabel(name)
-		label.setStyleSheet("background-color: red")
-		label.setAlignment(QtCore.Qt.AlignCenter)
-		label.setFixedSize(self.width/20,self.height/20)
-		layout.addWidget(label)
-		return label
+	def createProgramm(self, name, text_layout, color_layout):
+		text_label = QtGui.QLabel(name)
+		text_label.setStyleSheet("color: white")
+		text_label.setFont(QtGui.QFont("Times",weight=QtGui.QFont.Bold))
+		text_label.setFixedSize(self.width/20, self.height/20)
+		text_label.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+		text_layout.addWidget(text_label)
+		color_label = QtGui.QLabel("")
+		color_label.setStyleSheet("background-color:red")
+		color_label.setFixedSize(self.width/20, self.height/20)
+		color_label.setAlignment(QtCore.Qt.AlignCenter | QtCore.Qt.AlignVCenter)
+		color_layout.addWidget(color_label)
+		return color_label
 
 	def updateDisplay(self, infos):
 		self.velocity_ist_display.setText(str('%.2f' % (infos[0]*3.6)))
