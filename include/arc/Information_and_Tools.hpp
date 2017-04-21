@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <eigen3/Eigen/Eigen>
+#include <Eigen/StdVector>
 #include <fstream>
 #include <iostream>
 #include <math.h>
