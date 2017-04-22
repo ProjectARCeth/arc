@@ -128,8 +128,11 @@ double PurePursuit::curveRadius(int index){
 		Eigen::Vector3d i_front = teachs_[n_front];
 		Eigen::Vector3d back_front = i_front - i_back;
 		//Angle between i back and i front.
-		float gamma = acos(i_back.dot(-i_front)/i_back.squaredNorm());
-		if(sin(gamma)==0) radius_sum += 9999999;
+		double argument = i_back.dot(-i_front)/i_back.squaredNorm();
+		if(argument > 1.0) argument = 1.0;
+		if(argument < -1.0) argument = -1.0;
+		float gamma = acos(argument);
+		if(fabs(sin(gamma))<=0.01) radius_sum += 9999999;
 		else radius_sum += back_front.norm()/(2*sin(gamma));	
 	}
 	double radius = radius_sum/count;

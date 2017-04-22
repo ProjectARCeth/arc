@@ -5,8 +5,9 @@ ROSInterface::ROSInterface(){}
 ROSInterface::~ROSInterface(){}
 
 void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* tracker, CarModel* car_model,
-			  			Guard* guard, ObstacleDetection* obstacle_detection,
-			  			PurePursuit* pure_pursuit, StateEstimation* state_estimation,VCUInterface* vcu_interface){
+			  			Guard* guard, ObstacleDetection* obstacle_detection, PurePursuit* pure_pursuit, 
+			  			StateEstimation* state_estimation,VCUInterface* vcu_interface, 
+			  			bool rosbag_play, bool rosbag_record){
 	//Set class pointer.
 	tracker_ = tracker;
 	car_model_ = car_model;
@@ -25,13 +26,21 @@ void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* trac
 	pubs_.gui_info = node_->advertise<std_msgs::Float64MultiArray>("gui/data", 10);
 	pubs_.programms = node_->advertise<std_msgs::Int32MultiArray>("programms", 10);
 	pubs_.repeat_path = node_->advertise<nav_msgs::Path>("path", 10);
+	if(rosbag_record) pubs_.steering_angle = node_->advertise<std_msgs::Float64>("state_steering_angle", 10);
 	pubs_.teach_path = node_->advertise<nav_msgs::Path>("teach_path", 10);
+	if(rosbag_record) pubs_.wheel_rear_left = node_->advertise<std_msgs::Float64>("wheel_rear_left", 10);
+	if(rosbag_record) pubs_.wheel_rear_right = node_->advertise<std_msgs::Float64>("wheel_rear_right", 10);
 	//Init subscriber.
-	subs_.cam_sub = node_->subscribe("/cam0/image_raw", 10, &ROSInterface::camCallback, this);
-	subs_.gui_sub = node_->subscribe("/gui/commands", 10, &ROSInterface::guiCallback, this);
-	if(mode_) subs_.laser_sub = node_->subscribe("/velodyne_points", 10, &ROSInterface::laserCallback, this);
-	subs_.rovio_sub = node_->subscribe("/rovio/odometry", 10, &ROSInterface::rovioCallback, this);
-	subs_.rslam_sub = node_->subscribe("/orb_slam2/odometry",10,&ROSInterface::rslamCallback, this);
+	subs_.cam = node_->subscribe("/cam0/image_raw", 10, &ROSInterface::camCallback, this);
+	subs_.gui = node_->subscribe("/gui/commands", 10, &ROSInterface::guiCallback, this);
+	if(mode_) subs_.laser = node_->subscribe("/velodyne_points", 10, &ROSInterface::laserCallback, this);
+	subs_.rovio = node_->subscribe("/rovio/odometry", 10, &ROSInterface::rovioCallback, this);
+	subs_.rslam = node_->subscribe("/orb_slam2/odometry",10,&ROSInterface::rslamCallback, this);
+	if(rosbag_play){
+		subs_.steering_angle = node_->subscribe("/state_steering_angle",10,&ROSInterface::steeringCallback, this);
+		subs_.wheel_rear_left = node_->subscribe("/wheel_rear_left",10,&ROSInterface::wheelRearLeftCallback, this);
+		subs_.wheel_rear_right = node_->subscribe("/wheel_rear_right",10,&ROSInterface::wheelRearRightCallback, this);
+	}
 	//Initial spinning.
 	ros::Rate rate(10);
 	while(!guard_->initialProgrammCheck()){
@@ -179,6 +188,14 @@ void ROSInterface::publishProgramm(Programm running, Programm to_run){
 	pubs_.programms.publish(array);
 }
 
+void ROSInterface::publishVCUInfos(std::string name, double value){
+	std_msgs::Float64 vcu_info;
+	vcu_info.data = value;
+	if(name=="steering_angle") pubs_.steering_angle.publish(vcu_info);
+	if(name=="wheel_rear_left") pubs_.wheel_rear_left.publish(vcu_info);
+	if(name=="wheel_rear_right") pubs_.wheel_rear_right.publish(vcu_info);
+}
+
 void ROSInterface::camCallback(const sensor_msgs::Image::ConstPtr& msg){
 	//Resolve guard check.
 	guard_->setRunningStates(true, "vi");	
@@ -218,3 +235,12 @@ void ROSInterface::rslamCallback(const nav_msgs::Odometry::ConstPtr& msg){
 	//Resolve guard check.
 	guard_->setRunningStates(true, "rslam");
 }
+
+void ROSInterface::steeringCallback(const std_msgs::Float64::ConstPtr& msg){ 
+	car_model_->setSteeringAngle(msg->data);}
+
+void ROSInterface::wheelRearLeftCallback(const std_msgs::Float64::ConstPtr& msg){
+	car_model_->setRearLeftWheelVel(msg->data);}
+
+void ROSInterface::wheelRearRightCallback(const std_msgs::Float64::ConstPtr& msg){
+	car_model_->setRearRightWheelVel(msg->data);}

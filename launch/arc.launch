@@ -6,10 +6,13 @@
 
   <!-- Sensors -->
   <arg name="GPS" value="false" />
-  <arg name="SENSORS" value="true" />
-  <arg name="INTERFACE" value="true" />
+  <arg name="SENSORS" value="false" />
+  <arg name="INTERFACE" value="false" />
   <!-- Safety -->
-  <arg name="OBSTACLE_DETECTION" value="true"/> 
+  <arg name="OBSTACLE_DETECTION" value="false"/> 
+  <!-- Recording Bag -->
+  <arg name="ROSBAG_RECORD" value="false"/>
+  <arg name="ROSBAG_PLAY" value="true"/>
  
   <!-- Launch parameters: Name = name of testing, Mode = teach(false), repeat(true), Path_Length =  length of drivable path from beginning -->
   <arg name="Name" default="/home/sele/Paths/test" />
@@ -76,12 +79,12 @@
   </node>
   <!-- starting Rovio -->
   <node pkg="rovio" type="rovio_node" name="rovio" output="screen">
-   <param name="filter_config" value="$(find rovio)/cfg/rovio.info"/>
+   <param name="filter_config" value="$(find rovio)/cfg/arc.info"/>
    <param name="camera0_config" value="$(find rovio)/cfg/rovio_cam0.yaml"/>
    <param name="camera1_config" value="$(find rovio)/cfg/rovio_cam1.yaml"/>
   </node>
 <!-- starting ARC -->
-  <node pkg="arc" type="main" name="arc" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS)" />
+  <node pkg="arc" type="main" name="arc" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) $(arg ROSBAG_RECORD) $(arg ROSBAG_PLAY) " />
   <node pkg="arc" type="viewer.py" name="viewer" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) " />
   <node pkg="arc" type="tracker_pdf.py" name="tracker_pdf" output="screen" args="$(arg Name)" if="$(arg Mode)"/>
 

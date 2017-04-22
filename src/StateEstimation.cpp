@@ -94,7 +94,7 @@ int StateEstimation::searchCurrentArrayIndex(){
     Eigen::Vector3d pose = state_.position;
     //Finding maximal index so that in maximal width.
     int max_index = 0;
-    while((last_pose, teach_positions_[last_array_position+max_index]).norm()
+    while((last_pose - teach_positions_[last_array_position+max_index]).norm()
                  < control_.current_array_searching_width){
         max_index += 1;
     }
@@ -104,11 +104,11 @@ int StateEstimation::searchCurrentArrayIndex(){
     int lower_searching_bound = std::max(0, last_array_position-max_index);
     int upper_searching_bound = std::min((int)teach_positions_.size(),last_array_position+max_index);
     for (int s = lower_searching_bound; s < upper_searching_bound; s++){
-    double current_distance = (pose, teach_positions_[s]).norm();
-    if (current_distance < shortest_distance){
-      shortest_distance = current_distance;
-      smallest_distance_index = s;
-    }
+      double current_distance = (pose - teach_positions_[s]).norm();
+      if (current_distance < shortest_distance){
+        shortest_distance = current_distance;
+        smallest_distance_index = s;
+      }
     }
     return smallest_distance_index;
 }

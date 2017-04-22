@@ -30,7 +30,7 @@ class ROSInterface(QtCore.QObject):
 		self.gui_info_sub = rospy.Subscriber('gui/data', Float64MultiArray,self.dataCallback,queue_size=10)
 		self.programms_sub = rospy.Subscriber('programms',Int32MultiArray,self.programmCallback,queue_size=10) 
 		self.repeat_path_sub = rospy.Subscriber('path', Path,self.pathCallback,queue_size=10) 
-		self.teach_path_sub = rospy.Subscriber('teach_path', Path,self.teachCallback,queue_size=10)
+		#self.teach_path_sub = rospy.Subscriber('teach_path', Path,self.teachCallback,queue_size=10)
 
 	def publishInfo(self, info_list):
 		info = Int32MultiArray()

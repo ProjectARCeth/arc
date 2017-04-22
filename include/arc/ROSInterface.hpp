@@ -45,15 +45,21 @@ struct Pubs{
 	ros::Publisher gui_info;
 	ros::Publisher programms;
 	ros::Publisher repeat_path;
+	ros::Publisher steering_angle;
 	ros::Publisher teach_path;
+	ros::Publisher wheel_rear_left;
+	ros::Publisher wheel_rear_right;
 };
 
 struct Subs{
-	ros::Subscriber cam_sub;
-	ros::Subscriber gui_sub;
-	ros::Subscriber laser_sub;
-	ros::Subscriber rovio_sub;
-	ros::Subscriber rslam_sub;
+	ros::Subscriber cam;
+	ros::Subscriber gui;
+	ros::Subscriber laser;
+	ros::Subscriber rovio;
+	ros::Subscriber rslam;
+	ros::Subscriber steering_angle;
+	ros::Subscriber wheel_rear_left;
+	ros::Subscriber wheel_rear_right;
 };
 
 class ROSInterface{
@@ -61,8 +67,9 @@ public:
 	ROSInterface();
 	~ROSInterface();
 	void init(ros::NodeHandle* node, Information* infos, Tracker* tracker, CarModel* car_model,
-			  Guard* guard, ObstacleDetection* obstacle_detection,
-			  PurePursuit* pure_pursuit, StateEstimation* state_estimation,VCUInterface* vcu_interface);
+			  Guard* guard, ObstacleDetection* obstacle_detection, PurePursuit* pure_pursuit, 
+			  StateEstimation* state_estimation,VCUInterface* vcu_interface, 
+			  bool rosbag_play, bool rosbag_record);
 	void spinning();
 	template <class Type> void publish(std::string name, Type value);
 	void publishCarModel(Eigen::Vector2d value);
@@ -73,11 +80,15 @@ public:
 	void publishGUIInfo(State state, double steering_angle);
 	void publishPath(std::vector<Eigen::Vector3d> positions, std::string name);
 	void publishProgramm(Programm running, Programm to_run);
+	void publishVCUInfos(std::string name, double value);
 	void camCallback(const sensor_msgs::Image::ConstPtr& msg);
 	void guiCallback(const std_msgs::Int32MultiArray::ConstPtr& msg);
 	void laserCallback(const sensor_msgs::PointCloud2& msg);
 	void rovioCallback(const nav_msgs::Odometry::ConstPtr& msg);
 	void rslamCallback(const nav_msgs::Odometry::ConstPtr& msg);
+	void steeringCallback(const std_msgs::Float64::ConstPtr& msg);
+	void wheelRearLeftCallback(const std_msgs::Float64::ConstPtr& msg);
+	void wheelRearRightCallback(const std_msgs::Float64::ConstPtr& msg);
 private:
 	//ROS node.
 	ros::NodeHandle* node_;

@@ -7,10 +7,12 @@ VCUInterface::~VCUInterface(){
 	  send_msg("am", 0.0, true);
 }
 
-void VCUInterface::init(Information* infos,CarModel* car_model, Guard* guard){
+void VCUInterface::init(Information* infos,CarModel* car_model, Guard* guard, 
+                        ROSInterface* ros_interface, bool rosbag_record){
     //Set class pointer.
     car_model_ = car_model;
     guard_ = guard;
+    ros_interface_ = ros_interface;
     //Getting parameters.
     infos_ = infos;
     memset((char *) &si_me_, 0, sizeof(si_me_));
@@ -29,6 +31,8 @@ void VCUInterface::init(Information* infos,CarModel* car_model, Guard* guard){
       if ((sock_=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) printError("socket");
       if(bind(sock_, (struct sockaddr*)&si_me_, sizeof(si_me_)) == -1) printError("binding");
     }
+    //Rosbag. 
+    record_ = rosbag_record;
 }
 
 void VCUInterface::modeChange(bool mode){
@@ -100,9 +104,16 @@ void VCUInterface::recv_msgs(){
   	if(kind == "si"){
   	    value = (value-1000)*M_PI/180;
   	   	car_model_->setSteeringAngle(value);
+        if(record_) ros_interface_->publishVCUInfos("steering_angle", value);
   	} 
-  	else if(kind == "rr") car_model_->setRearRightWheelVel(value);
-  	else if(kind == "rl") car_model_->setRearLeftWheelVel(value);
+  	else if(kind == "rr"){
+      car_model_->setRearRightWheelVel(value);
+      if(record_) ros_interface_->publishVCUInfos("wheel_rear_right", value);
+    }
+  	else if(kind == "rl"){
+      car_model_->setRearLeftWheelVel(value);
+      if(record_) ros_interface_->publishVCUInfos("wheel_rear_left", value);
+    }
     else if(kind == "am" && value == 20.0) {}
   	else if(kind == "am" && value == 99.0) guard_->emergencyStop("VCU");
   	else if(kind == "cc" && value == 1.0) guard_->setRunningStates(true, "vcu");

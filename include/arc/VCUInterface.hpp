@@ -4,6 +4,7 @@
 #include <arc/CarModel.hpp>
 #include <arc/Guard.hpp>
 #include <arc/Information_and_Tools.hpp>
+#include <arc/ROSInterface.hpp>
 
 #include <arpa/inet.h>
 #include <iostream>
@@ -19,12 +20,13 @@
 class CarModel;
 class Guard;
 class Information;
+class ROSInterface;
 
 class VCUInterface{
 public:
 	VCUInterface();
 	~VCUInterface();
-	void init(Information* infos, CarModel* car_model, Guard* guard);
+	void init(Information* infos, CarModel* car_model, Guard* guard, ROSInterface* ros_interface, bool rosbag_record);
 	void modeChange(bool mode);
 	void send_msg(std::string symbol, double msg, bool requirement);
 	void send_msg(std::string symbol, double msg, bool requirement,
@@ -44,6 +46,9 @@ private:
 	CarModel* car_model_;
 	Guard* guard_;
 	Information* infos_;
+	ROSInterface* ros_interface_;
+	//Rosbag. 
+	bool record_;
 	//Useful functions.
 	void printError(std::string error);
 };

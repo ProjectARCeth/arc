@@ -41,8 +41,17 @@ double CarModel::getSteeringAngle(){return steering_angle_;}
 
 Eigen::Vector2d CarModel::getVelocity(){return local_velocity_;}
 
-void CarModel::setSteeringAngle(double steering_angle){steering_angle_ = steering_angle;}
+void CarModel::setSteeringAngle(double steering_angle){
+    steering_angle_ = steering_angle; 
+    updateModel();
+}
 
-void CarModel::setRearLeftWheelVel(double vel){velocity_rear_left_ = vel;}
+void CarModel::setRearLeftWheelVel(double vel){
+    velocity_rear_left_ = vel;
+    updateModel();
+}
 
-void CarModel::setRearRightWheelVel(double vel){velocity_rear_right_ = vel;}
+void CarModel::setRearRightWheelVel(double vel){
+    velocity_rear_right_ = vel;
+    updateModel();
+}

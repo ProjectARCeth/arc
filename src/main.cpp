@@ -30,34 +30,27 @@ int main(int argc, char** argv) {
 	//Getting mode and name.
 	std::string name = *(argv + 1);
 	bool mode = (strlen(*(argv + 2)) == 5) ? false : true;
+	//Getting Sensors.
+	bool use_obstacle_detection = (strlen(*(argv + 3)) == 5) ? false : true;
+	bool use_sensors = (strlen(*(argv + 4)) == 5) ? false : true;
+	bool use_vcu = (strlen(*(argv + 5)) == 5) ? false : true;
+	bool use_gps = (strlen(*(argv + 6)) == 5) ? false : true;
 	//Getting launchable programms.
 	Programm to_launch; 
 	to_launch.fill();
-	//Mode.
-	if(!mode){
-		to_launch.obstacle_detection = false;
-		to_launch.pure_pursuit = false;
-		to_launch.velodyne = false;
-	}
-	//Obstacle Detection.
-	if(strlen(*(argv + 3)) == 5){
-		to_launch.obstacle_detection = false;
-		to_launch.velodyne = false;
-	}
-	//Sensors.
-	if(strlen(*(argv + 4)) == 5){
-		to_launch.gps = false;
-		to_launch.vi = false;
-		to_launch.velodyne = false;
-	}
-	//VCU Interface.
-	if(strlen(*(argv + 5)) == 5) to_launch.vcu = false;
-	//GPS.
-	if(strlen(*(argv + 6)) == 5) to_launch.gps = false;
+	to_launch.obstacle_detection = (mode && use_obstacle_detection);
+	to_launch.pure_pursuit = (mode);
+	to_launch.gps = (use_sensors && use_gps);
+	to_launch.vcu = (use_vcu);
+	to_launch.velodyne = (use_obstacle_detection && use_sensors);
+	to_launch.vi = (use_sensors);
+	//Rosbags.
+	bool rosbag_record = (strlen(*(argv + 7)) == 5) ? false : true;
+	bool rosbag_play = (strlen(*(argv + 8)) == 5) ? false : true;
 	//Initialising classes.
 	info->init(&node, to_launch, mode, name);
 	state_estimation->init(info, guard, pure_pursuit);
-	vcu_interface->init(info, car_model, guard);
+	vcu_interface->init(info, car_model, guard, ros_interface, rosbag_record);
 	car_model->init(info, ros_interface, state_estimation);
 	if(mode) pure_pursuit->init(info, guard);
 	if(mode) grid_analyser->init(info, guard, pure_pursuit);
@@ -65,7 +58,7 @@ int main(int argc, char** argv) {
 	if(mode) tracker->init(name);
 	guard->init(info, grid_analyser, ros_interface, state_estimation, vcu_interface);
 	ros_interface->init(&node, info, tracker, car_model, guard, obstacle_detection, 
-						pure_pursuit, state_estimation, vcu_interface);
+						pure_pursuit, state_estimation, vcu_interface, rosbag_play, rosbag_record);
 	std::cout << "ARC: Everything initialised !" << std::endl;
 	//Looping.
 	ros_interface->spinning();
