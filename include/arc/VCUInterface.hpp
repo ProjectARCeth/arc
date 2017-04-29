@@ -26,7 +26,8 @@ class VCUInterface{
 public:
 	VCUInterface();
 	~VCUInterface();
-	void init(Information* infos, CarModel* car_model, Guard* guard, ROSInterface* ros_interface, bool rosbag_record);
+	void init(Information* infos, CarModel* car_model, Guard* guard, 
+			  ROSInterface* ros_interface, bool rosbag_record_);
 	void modeChange(bool mode);
 	void send_msg(std::string symbol, double msg, bool requirement);
 	void send_msg(std::string symbol, double msg, bool requirement,
@@ -42,13 +43,13 @@ private:
 	bool first_autonomous_;
 	//Use interface.
 	bool use_vcu_;
+	//Rosbag.
+	bool record_;
 	//Class elements.
 	CarModel* car_model_;
 	Guard* guard_;
 	Information* infos_;
 	ROSInterface* ros_interface_;
-	//Rosbag. 
-	bool record_;
 	//Useful functions.
 	void printError(std::string error);
 };

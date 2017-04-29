@@ -7,7 +7,7 @@ erod/HEIGHT_LASER_REAR_AXIS: 0.9 #[m], distance from laser to rear axis.
 erod/TOTAL_WIDTH: 1.6071  #[m], width of entire car.
 erod/WIDTH_WHEEL_AXIS: 1.5 #[m], distance wheel joints.
 erod/MAX_LATERAL_ACCELERATION: 8 #[m/s²], max. lateral acceleration.
-erod/MAX_STEERING_ANGLE: 25 #[rad] +-° steering wheel impact.
+erod/MAX_STEERING_ANGLE: 25 #[deg] +-° steering wheel impact.
 erod/MAX_VELOCITY: 17.5 #[m/s], ~70 km/h.
 erod/MU_HAFT: 0.8 # friction parameter.
 erod/WHEEL_DIAMETER: 0.5 #[m]. 

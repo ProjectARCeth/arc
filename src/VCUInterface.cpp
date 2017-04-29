@@ -31,7 +31,7 @@ void VCUInterface::init(Information* infos,CarModel* car_model, Guard* guard,
       if ((sock_=socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1) printError("socket");
       if(bind(sock_, (struct sockaddr*)&si_me_, sizeof(si_me_)) == -1) printError("binding");
     }
-    //Rosbag. 
+    //Rosbag.
     record_ = rosbag_record;
 }
 
@@ -124,5 +124,5 @@ void VCUInterface::recv_msgs(){
 }
 
 void VCUInterface::printError(std::string error){
-    // std::cout << "ARC Interface: Error with " + error << std::endl;
+    std::cout << "ARC Interface: Error with " + error << std::endl;
 }

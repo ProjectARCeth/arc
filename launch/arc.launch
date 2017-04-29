@@ -82,6 +82,7 @@
    <param name="filter_config" value="$(find rovio)/cfg/arc.info"/>
    <param name="camera0_config" value="$(find rovio)/cfg/rovio_cam0.yaml"/>
    <param name="camera1_config" value="$(find rovio)/cfg/rovio_cam1.yaml"/>
+   <param name="use_car_model_as_odom" value="false"/>
   </node>
 <!-- starting ARC -->
   <node pkg="arc" type="main" name="arc" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) $(arg ROSBAG_RECORD) $(arg ROSBAG_PLAY) " />
