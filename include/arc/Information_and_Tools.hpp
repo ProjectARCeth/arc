@@ -119,7 +119,7 @@ struct State{
 namespace arc_tools {
 namespace geometry{
 	Eigen::Vector3d transformEulerQuaternionVector(const Eigen::Vector4d quat);
-	Eigen::Matrix3d getRotationMatrix(const Eigen::Vector3d angles);
+	Eigen::Matrix3d getRotationMatrix(const Eigen::Vector4d quats);
 	Eigen::Vector3d globalToLocal(Eigen::Vector3d global_koordinate, State pose);
 	Eigen::Vector3d rotationLocalToGlobal(Eigen::Vector3d local, State pose);
 	Eigen::Vector4d multQuaternion(Eigen::Vector4d q1,Eigen::Vector4d q2);

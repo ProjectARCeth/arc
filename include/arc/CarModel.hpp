@@ -10,6 +10,8 @@
 #include <iostream>
 #include <math.h>
 
+#include <ros/ros.h>
+
 class Guard;
 class Information;
 class ROSInterface;
@@ -27,12 +29,14 @@ public:
 	void setSteeringAngle(double steering_angle);
 	void setRearLeftWheelVel(double vel);
 	void setRearRightWheelVel(double vel);
+	void setTimeStamp(ros::Time timestamp);
 private:
 	Eigen::Vector2d local_velocity_;
 	//Current measurements.
 	double steering_angle_;
 	double velocity_rear_left_;
 	double velocity_rear_right_;
+	ros::Time timestamp_;
 	//Parameter.
 	float distance_rear_front_axis_;
 	float width_axis_;

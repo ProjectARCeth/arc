@@ -92,9 +92,7 @@ void VCUInterface::recv_msgs(){
        printError("receiving");
     //Convert msg to string.
     std::string msg;
-    for (int i = 0; i < recv_len; ++i){
-       msg += buffer_in[i];
-    }
+    for (int i = 0; i < recv_len; ++i) msg += buffer_in[i];
     //Get kind of msg and value.
   	std::string kind = msg.substr(0,2);
   	std::string value_string(msg, 3, msg.length()-1);
@@ -102,7 +100,7 @@ void VCUInterface::recv_msgs(){
     double value = atof(buffer);
   	//Answers.
   	if(kind == "si"){
-  	    value = (value-1000)*M_PI/180;
+  	    value = (value-100000)*M_PI/180.0;
   	   	car_model_->setSteeringAngle(value);
         if(record_) ros_interface_->publishVCUInfos("steering_angle", value);
   	} 

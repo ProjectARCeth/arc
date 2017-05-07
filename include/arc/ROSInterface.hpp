@@ -24,6 +24,7 @@
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>
 #include <sensor_msgs/Image.h>
+#include <sensor_msgs/Imu.h>
 #include <sensor_msgs/PointCloud2.h>
 #include <std_msgs/Float64.h>
 #include <std_msgs/Float64MultiArray.h>
@@ -54,6 +55,7 @@ struct Pubs{
 struct Subs{
 	ros::Subscriber cam;
 	ros::Subscriber gui;
+	ros::Subscriber imu;
 	ros::Subscriber laser;
 	ros::Subscriber rovio;
 	ros::Subscriber rslam;
@@ -72,7 +74,7 @@ public:
 			  bool rosbag_play, bool rosbag_record);
 	void spinning();
 	template <class Type> void publish(std::string name, Type value);
-	void publishCarModel(Eigen::Vector2d value);
+	void publishCarModel(Eigen::Vector2d value, ros::Time timestamp);
 	void publishGUIInfo(State state, AckermannControl controls, double steering_angle, 
 						double distance_full, double distance_start, 
 						double tracking_error, double obstacle_distance, 
@@ -83,6 +85,7 @@ public:
 	void publishVCUInfos(std::string name, double value);
 	void camCallback(const sensor_msgs::Image::ConstPtr& msg);
 	void guiCallback(const std_msgs::Int32MultiArray::ConstPtr& msg);
+	void imuTimeCallback(const sensor_msgs::Imu::ConstPtr& msg);
 	void laserCallback(const sensor_msgs::PointCloud2& msg);
 	void rovioCallback(const nav_msgs::Odometry::ConstPtr& msg);
 	void rslamCallback(const nav_msgs::Odometry::ConstPtr& msg);

@@ -45,6 +45,8 @@ private:
 	Information* infos_;
 	//Helper functions.
 	double curveRadius(int index);
+	Eigen::Vector3d linearInterpolation(Eigen::Vector3d short_point, Eigen::Vector3d long_point, 
+										double distance_short, double distance_long, double lad);
 };
 
 #endif

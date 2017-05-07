@@ -40,16 +40,31 @@ double PurePursuit::calculateSteering(State state){
 	lad = std::min(lad,control_.upperbound_lad_s);
 	//Calculate reference steering index.
 	int ref_index = arc_tools::path::indexOfDistanceFront(state.current_index, lad,teachs_);
-	//Calculate distance to reference point.
-	double distance = arc_tools::path::distanceBetween(state.current_index, ref_index,teachs_);
-	//Calculate slope.
-	Eigen::Vector3d local_vector;
-	local_vector = arc_tools::geometry::globalToLocal(teachs_[ref_index], state);
-	float dy = local_vector(1);
-	float dx = local_vector(0);
-	float alpha = atan2(dy,dx);
-	//Calculate steering angle using Pure Pursuit.
-	double steering_angle = atan2(2*erod_.distance_wheel_axis*sin(alpha),distance);
+	//In path.
+	double steering_angle;
+	if(ref_index < teachs_.size()){
+		//Get short position.
+		double distance_short;
+		distance_short = arc_tools::path::distanceBetween(state.current_index, ref_index-1,teachs_);
+		Eigen::Vector3d short_point = teachs_[ref_index-1];
+		//Get long position.
+		double distance_long;
+		distance_long = arc_tools::path::distanceBetween(state.current_index, ref_index,teachs_);
+		Eigen::Vector3d long_point = teachs_[ref_index];
+		//Interpolation.
+		Eigen::Vector3d interpolated_point;
+		interpolated_point = linearInterpolation(short_point,long_point,distance_short, distance_long, lad);
+		//Calculate slope.
+		Eigen::Vector3d local_vector;
+		local_vector = arc_tools::geometry::globalToLocal(interpolated_point, state);
+		float dy = local_vector(1);
+		float dx = local_vector(0);
+		float alpha = atan2(dy,dx);
+		//Calculate steering angle using Pure Pursuit.
+		steering_angle = atan2(2*erod_.distance_wheel_axis*sin(alpha),lad);
+	}
+	//End of path.
+	else steering_angle = 0.0;
 	return steering_angle;
 }
 
@@ -139,6 +154,19 @@ double PurePursuit::curveRadius(int index){
 	//Preventing radius from nan.
 	if(radius > 2000) radius = 2000;
 	return radius;
+}
+
+Eigen::Vector3d PurePursuit::linearInterpolation(Eigen::Vector3d short_point, Eigen::Vector3d long_point, 
+												double distance_short, double distance_long, double lad){
+	//Init interpolation point.
+	Eigen::Vector3d interpolated = short_point;
+	//Check distance calculation.
+	if(distance_short == distance_long){
+		std::cout<<"Falsch interpoliert"<< std::endl;
+		return interpolated;
+	}
+	interpolated =  short_point + (lad-distance_short)/(distance_long - distance_short)*(long_point - short_point);
+	return interpolated;
 }
 
 void PurePursuit::setObstacleDistance(double distance){obstacle_distance_ = distance;}

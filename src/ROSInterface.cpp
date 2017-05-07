@@ -33,6 +33,7 @@ void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* trac
 	//Init subscriber.
 	subs_.cam = node_->subscribe("/cam0/image_raw", 10, &ROSInterface::camCallback, this);
 	subs_.gui = node_->subscribe("/gui/commands", 10, &ROSInterface::guiCallback, this);
+	subs_.imu = node_->subscribe("/imu0", 10, &ROSInterface::imuTimeCallback, this);
 	if(mode_) subs_.laser = node_->subscribe("/velodyne_points", 10, &ROSInterface::laserCallback, this);
 	subs_.rovio = node_->subscribe("/rovio/odometry", 10, &ROSInterface::rovioCallback, this);
 	subs_.rslam = node_->subscribe("/orb_slam2/odometry",10,&ROSInterface::rslamCallback, this);
@@ -109,8 +110,9 @@ template <class Type> void ROSInterface::publish(std::string name, Type value){
 	pub.publish(msg);
 }
 
-void ROSInterface::publishCarModel(Eigen::Vector2d value){
+void ROSInterface::publishCarModel(Eigen::Vector2d value, ros::Time timestamp){
 	geometry_msgs::TwistStamped msg;
+	msg.header.stamp = timestamp;
 	msg.twist.linear.x = value(0);
     msg.twist.linear.y  = value(1);
 	msg.twist.linear.z = 0;
@@ -213,6 +215,11 @@ void ROSInterface::guiCallback(const std_msgs::Int32MultiArray::ConstPtr& msg){
 	vcu_interface_->modeChange(array[0]);
 	if(array[1]) pure_pursuit_->setShutDown(true);
 	if(array[2]) guard_->emergencyStop("GUI");
+}
+
+void ROSInterface::imuTimeCallback(const sensor_msgs::Imu::ConstPtr& msg){
+	//Update car model time.
+	car_model_->setTimeStamp(msg->header.stamp);
 }
 
 void ROSInterface::laserCallback(const sensor_msgs::PointCloud2& msg){

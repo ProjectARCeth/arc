@@ -34,7 +34,7 @@ void CarModel::updateModel(){
     }
     //Update state estimation.
     state_estimation_->updateVelocity(local_velocity_.norm());
-    ros_interface_->publishCarModel(local_velocity_);
+    ros_interface_->publishCarModel(local_velocity_, timestamp_);
 }
 
 double CarModel::getSteeringAngle(){return steering_angle_;}
@@ -55,3 +55,5 @@ void CarModel::setRearRightWheelVel(double vel){
     velocity_rear_right_ = vel;
     updateModel();
 }
+
+void CarModel::setTimeStamp(ros::Time timestamp){timestamp_ = timestamp;}

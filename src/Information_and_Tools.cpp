@@ -92,15 +92,13 @@ Eigen::Vector3d transformEulerQuaternionVector(const Eigen::Vector4d quat){
     return euler;
 }
 
-Eigen::Matrix3d getRotationMatrix(const Eigen::Vector3d angles){	
-    double roll = angles(0);
-    double pitch = angles(1);
-    double yaw = angles(2);
-    //Rotation matrix.
+Eigen::Matrix3d getRotationMatrix(const Eigen::Vector4d quats){	
+    double a = quats(3); double b = quats(0);
+    double c = quats(1); double d = quats(2);
     Eigen::Matrix3d rotation_matrix;
-    rotation_matrix<<	cos(yaw)*cos(pitch), 	cos(yaw)*sin(pitch)*sin(roll)-sin(yaw)*cos(roll),	cos(yaw)*sin(pitch)*cos(roll)+sin(yaw)*sin(roll) ,
-  			sin(yaw)*cos(pitch),	sin(yaw)*sin(pitch)*sin(roll)+cos(yaw)*cos(roll),	sin(yaw)*sin(pitch)*cos(roll)-cos(yaw)*sin(roll),
-  			-sin(pitch),		cos(pitch)*sin(roll), 						cos(pitch)*cos(roll);
+    rotation_matrix<<(1-2*(c*c + d*d)), 2*(b*c - a*d), 2*(b*d + a*c), 
+                    2*(b*c + a*d), (1-2*(d*d + b*b)), 2*(c*d - a*b), 
+                    2*(b*d - a*c), 2*(c*d + a*b), (1-2*(b*b + c*c));
     return rotation_matrix;
 }
 
@@ -108,9 +106,8 @@ Eigen::Vector3d globalToLocal(Eigen::Vector3d global_koordinate, State pose){
   //Translatation
   Eigen::Vector3d temp = global_koordinate-pose.position;
   //Rotation
-  Eigen::Matrix3d R = getRotationMatrix(pose.euler());
-  Eigen::Matrix3d T = R.transpose();
-  Eigen::Vector3d local=T*temp;
+  Eigen::Matrix3d R = getRotationMatrix(pose.orientation).transpose();
+  Eigen::Vector3d local=R*temp;
   //Change of coordinate frame.
   Eigen::Vector3d local_rotated;
   local_rotated(0) = -local(1);
@@ -120,7 +117,7 @@ Eigen::Vector3d globalToLocal(Eigen::Vector3d global_koordinate, State pose){
 }
 
 Eigen::Vector3d rotationLocalToGlobal(Eigen::Vector3d local, State pose){
-    Eigen::Matrix3d R = getRotationMatrix(pose.euler());
+    Eigen::Matrix3d R = getRotationMatrix(pose.orientation);
     Eigen::Vector3d global = R*local;
     return global;
 }
