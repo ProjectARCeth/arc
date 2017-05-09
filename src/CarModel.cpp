@@ -32,9 +32,15 @@ void CarModel::updateModel(){
         local_velocity_(0) = cos(steering_angle_) * v_front;
         local_velocity_(1) = sin (steering_angle_) * v_front;
     }
-    //Update state estimation.
+    //Rotate due to tilted VI Sensor.
+    float tilting_angle = 11.0;
+    Eigen::Vector3d tilted_velocity;
+    tilted_velocity(0) = local_velocity_(1);
+    tilted_velocity(1) = sin(tilting_angle/180*M_PI)*local_velocity_(0);
+    tilted_velocity(2) = cos(tilting_angle/180*M_PI)*local_velocity_(0); 
+    //Update and send velocity.
     state_estimation_->updateVelocity(local_velocity_.norm());
-    ros_interface_->publishCarModel(local_velocity_, timestamp_);
+    ros_interface_->publishCarModel(tilted_velocity, timestamp_);
 }
 
 double CarModel::getSteeringAngle(){return steering_angle_;}
@@ -46,14 +52,8 @@ void CarModel::setSteeringAngle(double steering_angle){
     updateModel();
 }
 
-void CarModel::setRearLeftWheelVel(double vel){
-    velocity_rear_left_ = vel;
-    updateModel();
-}
+void CarModel::setRearLeftWheelVel(double vel){velocity_rear_left_ = vel;}
 
-void CarModel::setRearRightWheelVel(double vel){
-    velocity_rear_right_ = vel;
-    updateModel();
-}
+void CarModel::setRearRightWheelVel(double vel){velocity_rear_right_ = vel;}
 
 void CarModel::setTimeStamp(ros::Time timestamp){timestamp_ = timestamp;}

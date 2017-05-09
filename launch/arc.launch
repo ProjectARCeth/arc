@@ -11,11 +11,11 @@
   <!-- Safety -->
   <arg name="OBSTACLE_DETECTION" value="false"/> 
   <!-- Recording Bag -->
-  <arg name="ROSBAG_RECORD" value="false"/>
-  <arg name="ROSBAG_PLAY" value="true"/>
+  <arg name="ROSBAG_RECORD" default="false"/>
+  <arg name="ROSBAG_PLAY" default="true"/>
  
   <!-- Launch parameters: Name = name of testing, Mode = teach(false), repeat(true), Path_Length =  length of drivable path from beginning -->
-  <arg name="Name" default="/home/sele/Paths/test" />
+  <arg name="Name" default="/home/arcsystem/paths/test" />
   <arg name="Mode" default="true" /> 
 
 <group if="$(arg SENSORS)">
@@ -85,7 +85,7 @@
    <param name="use_car_model_as_odom" value="false"/>
   </node>
 <!-- starting ARC -->
-  <node pkg="arc" type="main" name="arc" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) $(arg ROSBAG_RECORD) $(arg ROSBAG_PLAY) " />
+  <node pkg="arc" type="main" name="arc" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) $(arg ROSBAG_RECORD) $(arg ROSBAG_PLAY) "/>
   <node pkg="arc" type="viewer.py" name="viewer" output="screen" args="$(arg Name) $(arg Mode) $(arg OBSTACLE_DETECTION) $(arg SENSORS) $(arg INTERFACE) $(arg GPS) " />
   <node pkg="arc" type="tracker_pdf.py" name="tracker_pdf" output="screen" args="$(arg Name)" if="$(arg Mode)"/>
 

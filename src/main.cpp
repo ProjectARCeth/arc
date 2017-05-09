@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
 						pure_pursuit, state_estimation, vcu_interface, rosbag_play, rosbag_record);
 	std::cout << "ARC: Everything initialised !" << std::endl;
 	//Looping.
-	ros_interface->spinning();
+	ros_interface->spinning(rosbag_play);
 	std::cout << "ARC: Shutting down !" << std::endl;
 	//Closing classes.
 	delete info;

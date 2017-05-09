@@ -27,23 +27,23 @@ void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* trac
 	pubs_.programms = node_->advertise<std_msgs::Int32MultiArray>("programms", 10);
 	pubs_.repeat_path = node_->advertise<nav_msgs::Path>("path", 10);
 	if(rosbag_record) pubs_.steering_angle = node_->advertise<std_msgs::Float64>("state_steering_angle", 10);
-	pubs_.teach_path = node_->advertise<nav_msgs::Path>("teach_path", 10);
+	if(mode_) pubs_.teach_path = node_->advertise<nav_msgs::Path>("teach_path", 10);
 	if(rosbag_record) pubs_.wheel_rear_left = node_->advertise<std_msgs::Float64>("wheel_rear_left", 10);
 	if(rosbag_record) pubs_.wheel_rear_right = node_->advertise<std_msgs::Float64>("wheel_rear_right", 10);
 	//Init subscriber.
-	subs_.cam = node_->subscribe("/cam0/image_raw", 10, &ROSInterface::camCallback, this);
-	subs_.gui = node_->subscribe("/gui/commands", 10, &ROSInterface::guiCallback, this);
-	subs_.imu = node_->subscribe("/imu0", 10, &ROSInterface::imuTimeCallback, this);
+	subs_.cam = node_->subscribe("/cam0/image_raw", 1, &ROSInterface::camCallback, this);
+	subs_.gui = node_->subscribe("/gui/commands", 1, &ROSInterface::guiCallback, this);
+	subs_.imu = node_->subscribe("/imu0", 1, &ROSInterface::imuTimeCallback, this);
 	if(mode_) subs_.laser = node_->subscribe("/velodyne_points", 10, &ROSInterface::laserCallback, this);
-	subs_.rovio = node_->subscribe("/rovio/odometry", 10, &ROSInterface::rovioCallback, this);
+	subs_.rovio = node_->subscribe("/rovio/odometry", 1, &ROSInterface::rovioCallback, this);
 	subs_.rslam = node_->subscribe("/orb_slam2/odometry",10,&ROSInterface::rslamCallback, this);
 	if(rosbag_play){
-		subs_.steering_angle = node_->subscribe("/state_steering_angle",10,&ROSInterface::steeringCallback, this);
-		subs_.wheel_rear_left = node_->subscribe("/wheel_rear_left",10,&ROSInterface::wheelRearLeftCallback, this);
-		subs_.wheel_rear_right = node_->subscribe("/wheel_rear_right",10,&ROSInterface::wheelRearRightCallback, this);
+		subs_.steering_angle = node_->subscribe("/state_steering_angle",1,&ROSInterface::steeringCallback, this);
+		subs_.wheel_rear_left = node_->subscribe("/wheel_rear_left",1,&ROSInterface::wheelRearLeftCallback, this);
+		subs_.wheel_rear_right = node_->subscribe("/wheel_rear_right",1,&ROSInterface::wheelRearRightCallback, this);
 	}
 	//Initial spinning.
-	ros::Rate rate(10);
+	ros::Rate rate(10.0);
 	while(!guard_->initialProgrammCheck()){
 		ros::spinOnce();
 		vcu_interface_->recv_msgs();
@@ -53,14 +53,14 @@ void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* trac
 	}
 }	
 
-void ROSInterface::spinning(){
-	ros::Rate rate(10);
+void ROSInterface::spinning(bool rosbag_play){
+	ros::Rate rate(10.0);
 	int gui_counter = 0;
 	int tracker_counter = 0;
 	while(ros::ok()){
 		ros::spinOnce();
 		//Getting vcu infos.
-		vcu_interface_->recv_msgs();
+		if(!rosbag_play) vcu_interface_->recv_msgs();
 		//Getting current states.
 		State state = state_estimation_->getState();
 		double steering_angle = car_model_->getSteeringAngle();
@@ -110,12 +110,12 @@ template <class Type> void ROSInterface::publish(std::string name, Type value){
 	pub.publish(msg);
 }
 
-void ROSInterface::publishCarModel(Eigen::Vector2d value, ros::Time timestamp){
+void ROSInterface::publishCarModel(Eigen::Vector3d value, ros::Time timestamp){
 	geometry_msgs::TwistStamped msg;
 	msg.header.stamp = timestamp;
 	msg.twist.linear.x = value(0);
     msg.twist.linear.y  = value(1);
-	msg.twist.linear.z = 0;
+	msg.twist.linear.z = value(2);
 	pubs_.car_model_velocity.publish(msg);
 }
 

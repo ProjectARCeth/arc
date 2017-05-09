@@ -72,9 +72,9 @@ public:
 			  Guard* guard, ObstacleDetection* obstacle_detection, PurePursuit* pure_pursuit, 
 			  StateEstimation* state_estimation,VCUInterface* vcu_interface, 
 			  bool rosbag_play, bool rosbag_record);
-	void spinning();
+	void spinning(bool rosbag_play);
 	template <class Type> void publish(std::string name, Type value);
-	void publishCarModel(Eigen::Vector2d value, ros::Time timestamp);
+	void publishCarModel(Eigen::Vector3d value, ros::Time timestamp);
 	void publishGUIInfo(State state, AckermannControl controls, double steering_angle, 
 						double distance_full, double distance_start, 
 						double tracking_error, double obstacle_distance, 
