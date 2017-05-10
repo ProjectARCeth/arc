@@ -33,26 +33,26 @@ safety/MAX_DEVIATION_FROM_TEACH_PATH: 100.0  #[m]
 safety/MIN_SHUTDOWN_VELOCITY: 1.0 #[m/s]
 safety/MAX_ORIENTATION_DIVERGENCE: 10 #[deg]
 safety/STATIC_TOLERANCE_LASER: 1.7 #[m] ObstacleDetection
-safety/FACTOR_TOLERANCE_LASER: 0.12 #[m] ObstacleDetection
+safety/FACTOR_TOLERANCE_LASER: 0.35 #[m] ObstacleDetection
 safety/OBSTACLE_SEARCH_WIDTH: 1.5 #[m] ObstacleDetection
 safety/DOWN_TIME: 20.0 #[s] Time to emergency stop after high level connection broken.
 
 #Control parameters.
-control/CURRENT_ARRAY_SEARCHING_WIDTH: 4.0  #[m]
+control/CURRENT_ARRAY_SEARCHING_WIDTH: 40.0  #[m]
 control/DISTANCE_INTERPOLATION: 3 #Distance of three points for curvature calculation.
 control/K1_LAD_LASER: 1.0 #Dynamic part for lenght of path to inflate.
 control/K2_LAD_LASER: 5.0 #Static part for lenght of path to inflate.
-control/K1_LAD_S: 1.1 #Dynamic part for look ahead distance steer.
+control/K1_LAD_S: 1.5 #Dynamic part for look ahead distance steer.
 control/K2_LAD_S: 0 #Static part for look ahead distance steer.
 control/K1_LAD_V: 0.5 #Dynamic part for lad radius for velocity.
 control/K2_LAD_V: 0 #Dynamic part for lad radius for velocity reference.
 control/SHUT_DOWN_TIME: 3 #Time to slow down to 0 in case of controlled shutdown.
-control/SLOW_DOWN_DISTANCE: 8 #Distance to end of path for car stating to slow down.
-control/SLOW_DOWN_PUFFER: 5 #Actual distance to end we will stop.
+control/SLOW_DOWN_DISTANCE: 6 #Distance to end of path for car stating to slow down.
+control/SLOW_DOWN_PUFFER: 3 #Actual distance to end we will stop.
 control/V_FREEDOM: 1.5 #Allowed upper difference to teach velocity.
 control/NUMBER_OF_EMERGENCY_CELLS: 1 #number of consecutive apparences of obstacles closer than braking distance for notstop.
-control/UPPERBOUND_LAD_S: 7.3 #Empyrisch getestet
-control/LOWERBOUND_LAD_S: 3  #Empyrisch getestet
+control/UPPERBOUND_LAD_S: 8.3 #Empyrisch getestet
+control/LOWERBOUND_LAD_S: 3.5  #Empyrisch getestet
 control/EMERGENCY_DISTANCE_LB: 1  #Minimal obstacle distance for emergency brake to reach at 10km/h(to test)
 control/EMERGENCY_DISTANCE_UB: 6  #Maximal obstacle distance for emergency brake to reach at 40km/h(to test)
 control/OBSTACLE_SLOW_DOWN_DISTANCE: 15 #Start to slow down due to obstacle
