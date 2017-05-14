@@ -55,7 +55,7 @@ void GridAnalyser::compareGrids(){
 	}
 	//If minimal one cell is in the danger area and overlays with grid map.
 	if (counter!=0)	{
-		std::cout<<"GRID ANALYSER: Etwas auf dem Weg!"<<std::endl;
+		std::cout<<"GRID ANALYSER: Etwas bei "<<distance_old<<" Meter "<<std::endl;
 		whattodo(j);
 	}
 	else{	
@@ -151,7 +151,7 @@ Eigen::Vector2d GridAnalyser::getGridElement(const int index){
 }
 
 int GridAnalyser::gridIndexOfGlobalPoint(const Eigen::Vector3d point){	
-	int index = -1;
+	int index = -100;
 	Eigen::Vector3d local = arc_tools::geometry::globalToLocal(point,state_);
 	int x_index = round(local(0)/resolution_);
 	int y_index = round(local(1)/resolution_);

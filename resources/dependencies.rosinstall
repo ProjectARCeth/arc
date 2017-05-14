@@ -1,0 +1,29 @@
+- git:
+   local-name: ublox
+   uri: https://github.com/ProjectARCeth/ublox
+- git:
+   local-name: rovio
+   uri: https://github.com/ProjectARCeth/rovio
+   version: arc
+- git:
+   local-name: kindr
+   uri: https://github.com/ethz-asl/kindr
+- git:
+   local-name: visensor_node
+   uri: https://github.com/ethz-asl/visensor_node
+- git: 
+   local-name: velodyne
+   uri: https://github.com/ros-drivers/velodyne
+- git:
+   local-name: eigen_catkin 
+   uri: https://github.com/ethz-asl/eigen_catkin
+- git:
+   local-name: libvisensor 
+   uri: https://github.com/ethz-asl/libvisensor
+- git:
+   local-name: catkin_simple 
+   uri: https://github.com/catkin/catkin_simple
+- git:
+   local-name: RSLAM
+   uri: https://github.com/ProjectARCeth/RSLAM
+   version: 2.FastMapLoad
