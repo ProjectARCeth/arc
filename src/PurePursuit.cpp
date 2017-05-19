@@ -148,7 +148,7 @@ double PurePursuit::curveRadius(int index){
 		if(argument < -1.0) argument = -1.0;
 		float gamma = acos(argument);
 		if(fabs(sin(gamma))<=0.01) radius_sum += 9999999;
-		else radius_sum += back_front.norm()/(2*sin(gamma));	
+		else radius_sum += back_front.norm()/(2*fabs(sin(gamma)));	
 	}
 	double radius = radius_sum/count;
 	//Preventing radius from nan.

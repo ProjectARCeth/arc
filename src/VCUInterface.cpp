@@ -39,7 +39,7 @@ void VCUInterface::modeChange(bool mode){
     bool init_mode = infos_->getMode();
     if(mode!=init_mode || first_autonomous_){
       send_msg("am",0.0,!mode);
-      send_msg("am",5.0,mode);
+      send_msg("am",1.0,mode);
       std::string modus = (mode) ? "autonomous" : "manuell";
       std::cout << "ARC: Change to " << modus << " mode !" << std::endl;
       infos_->setMode(mode);
@@ -100,7 +100,7 @@ void VCUInterface::recv_msgs(){
     double value = atof(buffer);
   	//Answers.
   	if(kind == "si"){
-  	    value = (value-100000)*M_PI/180.0;
+  	    value = (value-1000)*M_PI/180.0;
   	   	car_model_->setSteeringAngle(value);
         if(record_) ros_interface_->publishVCUInfos("steering_angle", value);
   	} 

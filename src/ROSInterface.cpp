@@ -54,7 +54,7 @@ void ROSInterface::init(ros::NodeHandle* node, Information* infos, Tracker* trac
 }	
 
 void ROSInterface::spinning(bool rosbag_play){
-	ros::Rate rate(10.0);
+	ros::Rate rate(30.0);
 	int gui_counter = 0;
 	int tracker_counter = 0;
 	while(ros::ok()){

@@ -13,11 +13,10 @@ erod/MU_HAFT: 0.8 # friction parameter.
 erod/WHEEL_DIAMETER: 0.5 #[m]. 
 
 #Sensor calibration.
-sensor/CAM_INIT_QUAT_X: 0.0041 #Initial orientation measurement of cam.
-sensor/CAM_INIT_QUAT_Y: 0.7754 #Initial orientation measurement of cam.
-sensor/CAM_INIT_QUAT_Z: -0.6314 #Initial orientation measurement of cam.
-sensor/CAM_INIT_QUAT_W: 0.0032 #Initial orientation measurement of cam.
-
+sensor/CAM_INIT_QUAT_X: 0.0034 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_Y: 0.7792 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_Z: -0.6266 #Initial orientation measurement of cam.
+sensor/CAM_INIT_QUAT_W: 0.0031 #Initial orientation measurement of cam.
 #General code parameters.
 general/MY_PORT: 8010 #My computer port.
 general/VCU_PORT: 8001 #National Instrument Port.
@@ -55,6 +54,6 @@ control/UPPERBOUND_LAD_S: 8.3 #Empyrisch getestet
 control/LOWERBOUND_LAD_S: 3.5  #Empyrisch getestet
 control/EMERGENCY_DISTANCE_LB: 1  #Minimal obstacle distance for emergency brake to reach at 10km/h(to test)
 control/EMERGENCY_DISTANCE_UB: 6  #Maximal obstacle distance for emergency brake to reach at 40km/h(to test)
-control/OBSTACLE_SLOW_DOWN_DISTANCE: 15 #Start to slow down due to obstacle
-control/OBSTACLE_PUFFER_DISTANCE: 2 #v_ref at 0 due to obstacle
+control/OBSTACLE_SLOW_DOWN_DISTANCE: 10 #Start to slow down due to obstacle
+control/OBSTACLE_PUFFER_DISTANCE: 7 #v_ref at 0 due to obstacle
 control/LENGHT_CORRECTION_PATH: 3.0

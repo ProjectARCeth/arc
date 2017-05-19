@@ -6,13 +6,13 @@
 
   <!-- Sensors -->
   <arg name="GPS" value="false" />
-  <arg name="SENSORS" value="false" />
-  <arg name="INTERFACE" value="false" />
+  <arg name="SENSORS" value="true" />
+  <arg name="INTERFACE" value="true" />
   <!-- Safety -->
   <arg name="OBSTACLE_DETECTION" value="false"/> 
   <!-- Recording Bag -->
   <arg name="ROSBAG_RECORD" default="false"/>
-  <arg name="ROSBAG_PLAY" default="true"/>
+  <arg name="ROSBAG_PLAY" default="false"/>
  
   <!-- Launch parameters: Name = name of testing, Mode = teach(false), repeat(true), Path_Length =  length of drivable path from beginning -->
   <arg name="Name" default="/home/arcsystem/paths/test" />

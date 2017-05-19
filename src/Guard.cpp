@@ -41,7 +41,7 @@ bool Guard::initialProgrammCheck(){
 void Guard::checkAndSendControlling(AckermannControl should_control){
 	//Always send steering command.
 	double steering_should_deg = should_control.steering_angle/M_PI*180;
-	vcu_interface_->send_msg("ss", steering_should_deg,true,car_.max_steering_angle,-car_.max_steering_angle,10000);
+	vcu_interface_->send_msg("ss", steering_should_deg,true,car_.max_steering_angle,-car_.max_steering_angle,0.0);
 	//Check emergency and send controlling to vcu.
 	if(watchdog())
 		vcu_interface_->send_msg("vs",should_control.velocity,true, 0.9*car_.max_velocity,-100, 0.0);
